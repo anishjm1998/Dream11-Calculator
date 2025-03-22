@@ -24,48 +24,11 @@ const PositionModal = ({ match, onSave, onClose }) => {
         points: getParticipationPoints(),
       }));
     } else {
-      // Check if there's a tied position
-      if (tiedPosition) {
-        // Find the players who are tied
-        const playerAtTiedPosition = rankings[tiedPosition - 1];
-        const tiedWithPlayer = rankings.find((player, index) => 
-          index !== tiedPosition - 1 && 
-          player === updatedRankings[tiedPosition]
-        );
-        
-        // Create results with tied positions having the same points
-        results = rankings.map((player, index) => {
-          // Both tied players get points for the better position
-          if (player === playerAtTiedPosition || player === tiedWithPlayer) {
-            return {
-              name: player,
-              position: tiedPosition,
-              points: getTotalPoints(tiedPosition),
-              tied: true
-            };
-          }
-          
-          // Determine the actual display position for non-tied players
-          let displayPosition = index + 1;
-          if (tiedPosition && index >= tiedPosition) {
-            // After the tied position, adjust the display position
-            displayPosition = index;
-          }
-          
-          return {
-            name: player,
-            position: displayPosition,
-            points: getTotalPoints(displayPosition),
-          };
-        });
-      } else {
-        // No tied positions, just use the rankings as is
-        results = rankings.map((player, index) => ({
-          name: player,
-          position: index + 1,
-          points: getTotalPoints(index + 1),
-        }));
-      }
+      results = rankings.map((player, index) => ({
+        name: player,
+        position: index + 1,
+        points: getTotalPoints(index + 1),
+      }));
     }
 
     onSave(results);
@@ -75,11 +38,8 @@ const PositionModal = ({ match, onSave, onClose }) => {
   const handleTiedPositions = () => {
     const tiedPos = parseInt(prompt("Enter the tied position (e.g., 1, 2, etc.):"));
     if (tiedPos && tiedPos > 0 && tiedPos < rankings.length) {
-      // Create a new array with modified rankings
-      const newRankings = [...rankings];
-      
       // First, make sure both positions have players assigned
-      if (!newRankings[tiedPos - 1] || !newRankings[tiedPos]) {
+      if (!rankings[tiedPos - 1] || !rankings[tiedPos]) {
         alert("Both positions must have players assigned to create a tie!");
         return;
       }
@@ -87,8 +47,8 @@ const PositionModal = ({ match, onSave, onClose }) => {
       // Store the tied position for the modal
       setTiedPosition(tiedPos);
       
-      // Create updated rankings for modal preview
-      setUpdatedRankings(newRankings);
+      // Set updated rankings for the modal preview
+      setUpdatedRankings([...rankings]);
       setIsTiedModalOpen(true);
     } else {
       alert("Invalid position entered! Position must be between 1 and " + (rankings.length - 1));
@@ -96,53 +56,53 @@ const PositionModal = ({ match, onSave, onClose }) => {
   };
 
   const handleConfirmTiedPositions = () => {
-    // Here we save the tied positions directly to the leaderboard
-    // and close both modals
+    if (!tiedPosition) return;
+    
+    // Create the results with tied positions
     const playerAtTiedPosition = updatedRankings[tiedPosition - 1];
     const tiedWithPlayer = updatedRankings[tiedPosition];
     
-    // Create results with tied positions
-    let results;
-    if (isAbandoned) {
-      results = predefinedPlayers.map((player) => ({
-        name: player,
-        points: getParticipationPoints(),
-      }));
-    } else {
-      results = [];
-      let currentRank = 1;
-      let skipNextIncrement = false;
-      
-      updatedRankings.forEach((player, index) => {
-        // Determine if this player is in a tied position
-        const isTied = (index === tiedPosition - 1 || index === tiedPosition) && 
-                      (player === playerAtTiedPosition || player === tiedWithPlayer);
-        
-        // For display purposes, both tied players should show the same rank
-        const displayRank = skipNextIncrement ? currentRank - 1 : currentRank;
-        
-        // If this is the first tied player, don't increment rank for the next player
-        if (isTied && index === tiedPosition - 1) {
-          skipNextIncrement = true;
-        } else if (index > tiedPosition) {
-          // After the tied players, resume normal rank incrementation
-          skipNextIncrement = false;
-        }
-        
-        results.push({
-          name: player,
-          position: displayRank,
-          points: isTied ? getTotalPoints(tiedPosition) : getTotalPoints(currentRank),
-          tied: isTied
-        });
-        
-        if (!skipNextIncrement) {
-          currentRank++;
-        }
+    // Calculate results with tied positions
+    const results = [];
+    
+    // Process players before the tie
+    for (let i = 0; i < tiedPosition - 1; i++) {
+      results.push({
+        name: updatedRankings[i],
+        position: i + 1,
+        points: getTotalPoints(i + 1)
       });
     }
     
-    // Save and close both modals
+    // Add the tied players
+    results.push({
+      name: playerAtTiedPosition,
+      position: tiedPosition,
+      points: getTotalPoints(tiedPosition),
+      tied: true
+    });
+    
+    results.push({
+      name: tiedWithPlayer,
+      position: tiedPosition,
+      points: getTotalPoints(tiedPosition),
+      tied: true
+    });
+    
+    // Process remaining players with adjusted positions
+    // Since two players are tied, they share a position, so we need to adjust
+    // the positions of subsequent players
+    for (let i = tiedPosition + 1; i < updatedRankings.length; i++) {
+      // Adjust position (+1) because two players are taking up one position
+      const adjustedPosition = i + 1;
+      results.push({
+        name: updatedRankings[i],
+        position: adjustedPosition,
+        points: getTotalPoints(adjustedPosition)
+      });
+    }
+    
+    // Save the results and close both modals
     onSave(results);
     setIsTiedModalOpen(false);
     onClose();
@@ -153,7 +113,7 @@ const PositionModal = ({ match, onSave, onClose }) => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-2xl shadow-lg w-[600px] mx-auto">
           <h3 className="text-2xl font-bold mb-6 text-gray-900 font-poppins">
-            Assign Rankings for {match.teams}
+            Assign Rankings for {match?.teams || "Match"}
           </h3>
 
           {/* Rankings (Dropdowns) */}
@@ -161,7 +121,7 @@ const PositionModal = ({ match, onSave, onClose }) => {
             {rankings.map((player, index) => (
               <div key={index} className="flex items-center justify-between">
                 <span className="text-lg font-semibold text-gray-800 font-poppins">
-                  Rank {index + 1}
+                  Rank {index + 1} ({getTotalPoints(index + 1)} points)
                 </span>
                 <select
                   value={player}
@@ -170,7 +130,11 @@ const PositionModal = ({ match, onSave, onClose }) => {
                 >
                   <option value="">Select Player</option>
                   {predefinedPlayers.map((playerName) => (
-                    <option key={playerName} value={playerName} disabled={rankings.includes(playerName) && playerName !== player}>
+                    <option 
+                      key={playerName} 
+                      value={playerName} 
+                      disabled={rankings.includes(playerName) && playerName !== player}
+                    >
                       {playerName}
                     </option>
                   ))}

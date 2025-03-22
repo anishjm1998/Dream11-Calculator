@@ -11,36 +11,47 @@ const TiedPositionsModal = ({ isOpen, onClose, tiedPosition, updatedRankings, on
   // Generate display rankings with correct tied positions
   const displayRankings = [];
   let currentRank = 1;
-  let skipNextIncrement = false;
-
-  updatedRankings.forEach((player, index) => {
-    // Determine if this player is in a tied position
-    const isTied = (index === tiedPosition - 1 || index === tiedPosition) && 
-                  (player === playerAtTiedPosition || player === tiedWithPlayer);
-    
-    // For display purposes, both tied players should show the same rank
-    const displayRank = skipNextIncrement ? currentRank - 1 : currentRank;
-    
-    // If this is the first tied player, don't increment rank for the next player
-    if (isTied && index === tiedPosition - 1) {
-      skipNextIncrement = true;
-    } else if (index > tiedPosition) {
-      // After the tied players, resume normal rank incrementation
-      skipNextIncrement = false;
-    }
-    
+  
+  // First, process player rankings up to the tied position
+  for (let i = 0; i < tiedPosition - 1; i++) {
     displayRankings.push({
-      player,
-      rank: displayRank,
-      isTied,
-      // Both tied players get the same points (the points for the lower/better position)
-      points: isTied ? getTotalPoints(tiedPosition) : getTotalPoints(currentRank)
+      player: updatedRankings[i],
+      rank: currentRank,
+      isTied: false,
+      points: getTotalPoints(currentRank)
     });
-    
-    if (!skipNextIncrement) {
-      currentRank++;
-    }
+    currentRank++;
+  }
+  
+  // Add the tied players with the same rank and points
+  displayRankings.push({
+    player: playerAtTiedPosition,
+    rank: currentRank,
+    isTied: true,
+    points: getTotalPoints(currentRank)
   });
+  
+  displayRankings.push({
+    player: tiedWithPlayer,
+    rank: currentRank,
+    isTied: true,
+    points: getTotalPoints(currentRank)
+  });
+  
+  // Skip a rank since we used it twice for the tied players
+  currentRank++;
+  
+  // Process remaining players with adjusted ranks
+  for (let i = tiedPosition + 1; i < updatedRankings.length; i++) {
+    // Skip one position because we have two players in the tied position
+    displayRankings.push({
+      player: updatedRankings[i],
+      rank: currentRank,
+      isTied: false,
+      points: getTotalPoints(currentRank)
+    });
+    currentRank++;
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
