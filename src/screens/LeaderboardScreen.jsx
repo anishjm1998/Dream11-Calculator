@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import Confetti from "react-confetti";
 
 const LeaderboardScreen = () => {
   const [players, setPlayers] = useState([
@@ -12,6 +13,8 @@ const LeaderboardScreen = () => {
     { name: "Akash", points: 0 },
     { name: "Indrajit", points: 0 },
   ]);
+
+  const [showConfetti, setShowConfetti] = useState(true);
 
   useEffect(() => {
     const savedResults = localStorage.getItem("fixtureResults");
@@ -46,6 +49,10 @@ const LeaderboardScreen = () => {
 
       setPlayers(finalPlayers);
     }
+
+    // Hide confetti after 3 seconds
+    const confettiTimeout = setTimeout(() => setShowConfetti(false), 3000);
+    return () => clearTimeout(confettiTimeout);
   }, []);
 
   const resetScores = () => {
@@ -53,46 +60,73 @@ const LeaderboardScreen = () => {
     window.location.reload();
   };
 
+  // Get trophy emoji based on position
+  const getTrophyEmoji = (position) => {
+    switch (position) {
+      case 1:
+        return "🥇";
+      case 2:
+        return "🥈";
+      case 3:
+        return "🥉";
+      default:
+        return "";
+    }
+  };
+
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-blue-50 to-purple-50">
+      {/* Confetti Animation */}
+      {showConfetti && <Confetti />}
+
       <div className="max-w-7xl mx-auto">
         {/* Page Heading */}
         <div className="text-center mb-12">
           <h1 className="text-6xl font-extrabold text-gray-900 font-poppins">
-            Leaderboard
+            🏆 Leaderboard 🏆
           </h1>
+          <p className="text-xl text-gray-700 mt-4 font-poppins">
+            Check out the current standings!
+          </p>
         </div>
 
         {/* Leaderboard Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {players.map((player, index) => (
-            <motion.div
-              key={index}
-              className="bg-white p-6 rounded-2xl shadow-lg border-2 border-gray-200 hover:shadow-xl transition-all"
-              whileHover={{ scale: 1.05 }}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <span className="text-2xl font-bold text-gray-900 font-poppins">
-                    #{player.position}
-                  </span>
-                  <span className="text-xl font-semibold text-gray-800 font-poppins">
-                    {player.name}
+          <AnimatePresence>
+            {players.map((player, index) => (
+              <motion.div
+                key={player.name}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -50 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-gradient-to-br from-white to-gray-50 p-6 rounded-2xl shadow-lg border-2 border-gray-200 hover:shadow-xl transition-all"
+                whileHover={{ scale: 1.05 }}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <span className="text-2xl font-bold text-gray-900 font-poppins">
+                      #{player.position} {getTrophyEmoji(player.position)}
+                    </span>
+                    <span className="text-xl font-semibold text-gray-800 font-poppins">
+                      {player.name}
+                    </span>
+                  </div>
+                  <span className="text-xl font-bold text-gray-900 font-poppins">
+                    {player.points} pts
                   </span>
                 </div>
-                <span className="text-xl font-bold text-gray-900 font-poppins">
-                  {player.points} pts
-                </span>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
 
         {/* Buttons */}
         <div className="mt-12 flex justify-center space-x-4">
           <Link
             to="/"
-            className="px-8 py-3 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-all duration-300 font-poppins">
+            className="px-8 py-3 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-all duration-300 font-poppins"
+          >
             Go Back
           </Link>
           <button

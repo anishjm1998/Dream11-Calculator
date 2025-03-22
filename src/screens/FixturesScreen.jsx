@@ -112,7 +112,7 @@ const FixturesScreen = () => {
       <div className="flex justify-between items-center mb-8">
         <Link
           to="/"
-          className="px-6 py-3 bg-gray-500 text-white rounded-full hover:bg-gray-600 transition duration-300 font-poppins"
+          className="px-6 py-2 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-all duration-300 font-poppins"
         >
           Go Back
         </Link>
