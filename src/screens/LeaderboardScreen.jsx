@@ -75,58 +75,58 @@ const LeaderboardScreen = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#E6E6FA] flex items-center justify-center">
+    <div className="min-h-screen bg-[#E6E6FA] flex items-center justify-center p-4">
       {/* Confetti Animation */}
       {showConfetti && <Confetti />}
 
-      <div className="max-w-7xl w-full px-6">
+      <div className="max-w-7xl w-full px-4">
         {/* Page Heading */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-gray-900 font-poppins">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 font-poppins">
             Leaderboard
           </h1>
         </div>
 
-        {/* Podium for Top 3 Players */}
-        <div className="flex justify-center items-end space-x-4 mb-12">
-          {/* 2nd Place */}
-          {players.length > 1 && (
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-gradient-to-br from-yellow-100 to-yellow-200 p-6 rounded-2xl shadow-lg border-2 border-yellow-600 text-center w-1/4"
-              whileHover={{ scale: 1.05 }} // Add hover effect
-            >
-              <span className="text-2xl font-bold text-gray-900 font-poppins">
-                🥈 2nd Place
-              </span>
-              <p className="text-xl font-semibold text-gray-800 font-poppins mt-2">
-                {players[1].name}
-              </p>
-              <p className="text-lg font-bold text-gray-900 font-poppins">
-                {players[1].points} pts
-              </p>
-            </motion.div>
-          )}
-
+        {/* Top 3 Players - Horizontal Layout */}
+        <div className="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4 mb-8">
           {/* 1st Place */}
           {players.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-gradient-to-br from-pink-100 to-pink-200 p-8 rounded-2xl shadow-lg border-2 border-pink-600 text-center w-1/3"
-              whileHover={{ scale: 1.05 }} // Add hover effect
+              className="bg-gradient-to-br from-pink-100 to-pink-200 p-6 md:p-8 rounded-2xl shadow-lg border-2 border-pink-600 text-center w-full md:w-1/3"
+              whileHover={{ scale: 1.05 }}
             >
-              <span className="text-3xl font-bold text-gray-900 font-poppins">
+              <span className="text-2xl md:text-3xl font-bold text-gray-900 font-poppins">
                 🥇 1st Place
               </span>
-              <p className="text-2xl font-semibold text-gray-800 font-poppins mt-2">
+              <p className="text-xl md:text-2xl font-semibold text-gray-800 font-poppins mt-2 truncate">
                 {players[0].name}
               </p>
-              <p className="text-xl font-bold text-gray-900 font-poppins">
+              <p className="text-lg md:text-xl font-bold text-gray-900 font-poppins">
                 {players[0].points} pts
+              </p>
+            </motion.div>
+          )}
+
+          {/* 2nd Place */}
+          {players.length > 1 && (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-gradient-to-br from-yellow-100 to-yellow-200 p-6 md:p-8 rounded-2xl shadow-lg border-2 border-yellow-600 text-center w-full md:w-1/3"
+              whileHover={{ scale: 1.05 }}
+            >
+              <span className="text-2xl md:text-3xl font-bold text-gray-900 font-poppins">
+                🥈 2nd Place
+              </span>
+              <p className="text-xl md:text-2xl font-semibold text-gray-800 font-poppins mt-2 truncate">
+                {players[1].name}
+              </p>
+              <p className="text-lg md:text-xl font-bold text-gray-900 font-poppins">
+                {players[1].points} pts
               </p>
             </motion.div>
           )}
@@ -137,16 +137,16 @@ const LeaderboardScreen = () => {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-gradient-to-br from-purple-100 to-purple-200 p-6 rounded-2xl shadow-lg border-2 border-purple-600 text-center w-1/4"
-              whileHover={{ scale: 1.05 }} // Add hover effect
+              className="bg-gradient-to-br from-purple-100 to-purple-200 p-6 md:p-8 rounded-2xl shadow-lg border-2 border-purple-600 text-center w-full md:w-1/3"
+              whileHover={{ scale: 1.05 }}
             >
-              <span className="text-2xl font-bold text-gray-900 font-poppins">
+              <span className="text-2xl md:text-3xl font-bold text-gray-900 font-poppins">
                 🥉 3rd Place
               </span>
-              <p className="text-xl font-semibold text-gray-800 font-poppins mt-2">
+              <p className="text-xl md:text-2xl font-semibold text-gray-800 font-poppins mt-2 truncate">
                 {players[2].name}
               </p>
-              <p className="text-lg font-bold text-gray-900 font-poppins">
+              <p className="text-lg md:text-xl font-bold text-gray-900 font-poppins">
                 {players[2].points} pts
               </p>
             </motion.div>
@@ -154,7 +154,7 @@ const LeaderboardScreen = () => {
         </div>
 
         {/* Leaderboard Cards for Other Players */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <AnimatePresence>
             {players.slice(3).map((player, index) => (
               <motion.div
@@ -163,19 +163,19 @@ const LeaderboardScreen = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -50 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="p-6 rounded-2xl shadow-lg border-2 bg-gray-100 border-gray-300 hover:shadow-xl transition-all"
-                whileHover={{ scale: 1.05 }} // Add hover effect
+                className="p-4 rounded-2xl shadow-lg border-2 bg-gray-100 border-gray-300 hover:shadow-xl transition-all"
+                whileHover={{ scale: 1.05 }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                    <span className="text-2xl font-bold text-gray-900 font-poppins">
+                    <span className="text-xl font-bold text-gray-900 font-poppins">
                       #{player.position}
                     </span>
-                    <span className="text-xl font-semibold text-gray-800 font-poppins">
+                    <span className="text-lg font-semibold text-gray-800 font-poppins truncate">
                       {player.name}
                     </span>
                   </div>
-                  <span className="text-xl font-bold text-gray-900 font-poppins">
+                  <span className="text-lg font-bold text-gray-900 font-poppins">
                     {player.points} pts
                   </span>
                 </div>
@@ -185,16 +185,16 @@ const LeaderboardScreen = () => {
         </div>
 
         {/* Buttons */}
-        <div className="mt-12 flex justify-center space-x-4">
+        <div className="mt-8 flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
           <Link
             to="/"
-            className="px-8 py-3 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-all duration-300 font-poppins"
+            className="px-6 py-2 bg-gray-900 text-white rounded-full hover:bg-gray-800 transition-all duration-300 font-poppins text-center"
           >
             Go Back
           </Link>
           <button
             onClick={resetScores}
-            className="px-8 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all font-poppins"
+            className="px-6 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all font-poppins text-center"
           >
             Reset Scores
           </button>

@@ -116,23 +116,23 @@ const PositionModal = ({ match, onSave, onClose }) => {
 
   return (
     <>
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-2xl shadow-lg w-[600px] mx-auto">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+        <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl shadow-lg w-full max-w-md mx-auto">
           <h3 className="text-2xl font-bold mb-6 text-gray-900 font-poppins">
             Assign Rankings for {match?.teams || "Match"}
           </h3>
 
           {/* Rankings (Dropdowns) */}
-          <div className="space-y-4">
+          <div className="space-y-4 max-h-[60vh] overflow-y-auto">
             {rankings.map((player, index) => (
-              <div key={index} className="flex items-center justify-between">
+              <div key={index} className="flex flex-col space-y-2">
                 <span className="text-lg font-semibold text-gray-800 font-poppins">
                   Rank {index + 1} ({getTotalPoints(index + 1)} points)
                 </span>
                 <select
                   value={player}
                   onChange={(e) => handleRankingChange(index, e.target.value)}
-                  className="p-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 w-48"
+                  className="p-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 w-full"
                 >
                   <option value="">Select Player</option>
                   {predefinedPlayers.map((playerName) => (
@@ -150,7 +150,7 @@ const PositionModal = ({ match, onSave, onClose }) => {
           </div>
 
           {/* Buttons for Tied Positions and Abandoned Match */}
-          <div className="mt-8 flex justify-between">
+          <div className="mt-8 flex flex-col space-y-4">
             <button
               onClick={handleTiedPositions}
               className="px-6 py-2 bg-yellow-500 text-white rounded-full hover:bg-yellow-600 transition-colors font-poppins"
@@ -168,7 +168,7 @@ const PositionModal = ({ match, onSave, onClose }) => {
           </div>
 
           {/* Save and Cancel Buttons */}
-          <div className="mt-8 flex justify-end space-x-4">
+          <div className="mt-8 flex flex-col space-y-4">
             <button
               onClick={onClose}
               className="px-6 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors font-poppins"

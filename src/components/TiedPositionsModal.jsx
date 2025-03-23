@@ -11,36 +11,36 @@ const TiedPositionsModal = ({ isOpen, onClose, tiedPosition, updatedRankings, on
   // Generate display rankings with correct tied positions
   const displayRankings = [];
   let currentRank = 1;
-  
+
   // First, process player rankings up to the tied position
   for (let i = 0; i < tiedPosition - 1; i++) {
     displayRankings.push({
       player: updatedRankings[i],
       rank: currentRank,
       isTied: false,
-      points: getTotalPoints(currentRank)
+      points: getTotalPoints(currentRank),
     });
     currentRank++;
   }
-  
+
   // Add the tied players with the same rank and points
   displayRankings.push({
     player: playerAtTiedPosition,
     rank: currentRank,
     isTied: true,
-    points: getTotalPoints(currentRank)
+    points: getTotalPoints(currentRank),
   });
-  
+
   displayRankings.push({
     player: tiedWithPlayer,
     rank: currentRank,
     isTied: true,
-    points: getTotalPoints(currentRank)
+    points: getTotalPoints(currentRank),
   });
-  
+
   // Skip a rank since we used it twice for the tied players
   currentRank++;
-  
+
   // Process remaining players with adjusted ranks
   for (let i = tiedPosition + 1; i < updatedRankings.length; i++) {
     // Skip one position because we have two players in the tied position
@@ -48,14 +48,14 @@ const TiedPositionsModal = ({ isOpen, onClose, tiedPosition, updatedRankings, on
       player: updatedRankings[i],
       rank: currentRank,
       isTied: false,
-      points: getTotalPoints(currentRank)
+      points: getTotalPoints(currentRank),
     });
     currentRank++;
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-2xl shadow-lg w-[600px] mx-auto">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
+      <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl shadow-lg w-full max-w-md mx-auto">
         <h3 className="text-2xl font-bold mb-6 text-gray-900 font-poppins">
           Tied Positions
         </h3>
@@ -70,11 +70,11 @@ const TiedPositionsModal = ({ isOpen, onClose, tiedPosition, updatedRankings, on
         </div>
 
         {/* Updated Rankings Display */}
-        <div className="space-y-4 mt-6">
+        <div className="space-y-4 max-h-[40vh] overflow-y-auto">
           <h4 className="text-lg font-medium">Updated Rankings:</h4>
           {displayRankings.map((item, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className={`flex items-center justify-between p-3 rounded-lg ${
                 item.isTied ? "bg-yellow-50 border border-yellow-200" : ""
               }`}
@@ -90,7 +90,7 @@ const TiedPositionsModal = ({ isOpen, onClose, tiedPosition, updatedRankings, on
         </div>
 
         {/* Save and Cancel Buttons */}
-        <div className="mt-8 flex justify-end space-x-4">
+        <div className="mt-8 flex flex-col space-y-4">
           <button
             onClick={onClose}
             className="px-6 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors font-poppins"

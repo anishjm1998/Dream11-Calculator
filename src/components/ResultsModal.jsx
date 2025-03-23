@@ -34,9 +34,11 @@ const ResultsModal = ({ match, results, onClose }) => {
               <span className="text-lg font-semibold text-gray-900 font-poppins">
                 {result.name}
               </span>
-              <span className="text-lg font-bold text-gray-900 font-poppins">
-                {result.points} points
-              </span>
+              {result.points !== undefined && (
+                <span className="text-lg font-bold text-gray-900 font-poppins">
+                  {result.points} points
+                </span>
+              )}
             </div>
           ))}
         </div>
