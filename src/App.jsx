@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import HomeScreen from "./screens/HomeScreen";
 import FixturesScreen from "./screens/FixturesScreen";
 import LeaderboardScreen from "./screens/LeaderboardScreen";
