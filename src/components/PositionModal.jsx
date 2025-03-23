@@ -11,9 +11,9 @@ const PositionModal = ({ match, onSave, onClose }) => {
     "Ashwin",
     "Akash",
     "Indrajit",
-    "Dipra", // Added 8th player
+    "Dipra",
   ];
-  const [rankings, setRankings] = useState(Array(8).fill("")); // Updated for 8 players
+  const [rankings, setRankings] = useState(Array(8).fill("")); 
   const [isAbandoned, setIsAbandoned] = useState(false);
   const [isTiedModalOpen, setIsTiedModalOpen] = useState(false);
   const [tiedPosition, setTiedPosition] = useState(null);
@@ -47,16 +47,12 @@ const PositionModal = ({ match, onSave, onClose }) => {
   const handleTiedPositions = () => {
     const tiedPos = parseInt(prompt("Enter the tied position (e.g., 1, 2, etc.):"));
     if (tiedPos && tiedPos > 0 && tiedPos < rankings.length) {
-      // First, make sure both positions have players assigned
       if (!rankings[tiedPos - 1] || !rankings[tiedPos]) {
         alert("Both positions must have players assigned to create a tie!");
         return;
       }
 
-      // Store the tied position for the modal
       setTiedPosition(tiedPos);
-
-      // Set updated rankings for the modal preview
       setUpdatedRankings([...rankings]);
       setIsTiedModalOpen(true);
     } else {
@@ -67,14 +63,10 @@ const PositionModal = ({ match, onSave, onClose }) => {
   const handleConfirmTiedPositions = () => {
     if (!tiedPosition) return;
 
-    // Create the results with tied positions
     const playerAtTiedPosition = updatedRankings[tiedPosition - 1];
     const tiedWithPlayer = updatedRankings[tiedPosition];
-
-    // Calculate results with tied positions
     const results = [];
 
-    // Process players before the tie
     for (let i = 0; i < tiedPosition - 1; i++) {
       results.push({
         name: updatedRankings[i],
@@ -83,7 +75,6 @@ const PositionModal = ({ match, onSave, onClose }) => {
       });
     }
 
-    // Add the tied players
     results.push({
       name: playerAtTiedPosition,
       position: tiedPosition,
@@ -98,7 +89,6 @@ const PositionModal = ({ match, onSave, onClose }) => {
       tied: true,
     });
 
-    // Process remaining players with adjusted positions
     for (let i = tiedPosition + 1; i < updatedRankings.length; i++) {
       const adjustedPosition = i + 1;
       results.push({
@@ -108,7 +98,6 @@ const PositionModal = ({ match, onSave, onClose }) => {
       });
     }
 
-    // Save the results and close both modals
     onSave(results);
     setIsTiedModalOpen(false);
     onClose();
@@ -117,10 +106,13 @@ const PositionModal = ({ match, onSave, onClose }) => {
   return (
     <>
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-        <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl shadow-lg w-full max-w-md mx-auto">
-          <h3 className="text-2xl font-bold mb-6 text-gray-900 font-poppins">
-            Assign Rankings for {match?.teams || "Match"}
-          </h3>
+        <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl shadow-lg w-full max-w-md mx-auto my-8">
+          {/* Modal Header */}
+          <div className="sticky top-0 bg-gradient-to-br from-blue-50 to-purple-50 z-10">
+            <h3 className="text-2xl font-bold mb-6 text-gray-900 font-poppins">
+              Assign Rankings for {match?.teams || "Match"}
+            </h3>
+          </div>
 
           {/* Rankings (Dropdowns) */}
           <div className="space-y-4 max-h-[60vh] overflow-y-auto">

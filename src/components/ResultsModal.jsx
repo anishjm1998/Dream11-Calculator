@@ -1,7 +1,6 @@
 import React from "react";
 
 const ResultsModal = ({ match, results, onClose }) => {
-  // Define colors for each position
   const positionColors = [
     "bg-pink-100 border-pink-600", // 1st Place
     "bg-yellow-100 border-yellow-600", // 2nd Place

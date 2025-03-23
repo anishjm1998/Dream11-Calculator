@@ -22,7 +22,7 @@ const FixtureCard = ({ fixture, onSave, isCompleted, onEnterRankings, onViewResu
       className={`p-6 rounded-2xl shadow-lg border-2 ${cardColor} ${
         isCompleted ? "opacity-70" : "hover:shadow-xl hover:scale-105"
       } transition-all duration-300 cursor-pointer`}
-      onClick={isCompleted ? onViewResults : undefined} // Trigger onViewResults if completed
+      onClick={isCompleted ? onViewResults : undefined}
     >
       <h3 className="text-xl font-bold mb-2 text-gray-900 font-poppins">Match {fixture.id}</h3>
       <h3 className="text-lg mb-4 text-gray-800 font-poppins">{fixture.teams}</h3>

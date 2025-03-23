@@ -12,7 +12,7 @@ const LeaderboardScreen = () => {
     { name: "Ashwin", points: 0 },
     { name: "Akash", points: 0 },
     { name: "Indrajit", points: 0 },
-    { name: "Dipra", points: 0 }, // Added 8th player
+    { name: "Dipra", points: 0 },
   ]);
 
   const [showConfetti, setShowConfetti] = useState(true);
@@ -37,12 +37,11 @@ const LeaderboardScreen = () => {
         points: playerPoints[player.name] || 0,
       }));
 
-      // Sort players by points (descending) and then by name (ascending)
       updatedPlayers.sort((a, b) => {
         if (b.points === a.points) {
-          return a.name.localeCompare(b.name); // Sort by name if points are equal
+          return a.name.localeCompare(b.name);
         }
-        return b.points - a.points; // Sort by points
+        return b.points - a.points;
       });
 
       const finalPlayers = [];
@@ -56,12 +55,10 @@ const LeaderboardScreen = () => {
 
       setPlayers(finalPlayers);
     } else {
-      // If no saved results, sort players alphabetically
       const sortedPlayers = [...players].sort((a, b) => a.name.localeCompare(b.name));
       setPlayers(sortedPlayers.map((player, index) => ({ ...player, position: index + 1 })));
     }
 
-    // Hide confetti after 3 seconds
     const confettiTimeout = setTimeout(() => setShowConfetti(false), 3000);
     return () => clearTimeout(confettiTimeout);
   }, []);

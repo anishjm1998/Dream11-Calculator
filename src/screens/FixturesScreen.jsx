@@ -84,7 +84,7 @@ const FixturesScreen = () => {
   });
 
   const [isPositionModalOpen, setIsPositionModalOpen] = useState(false);
-  const [isResultsModalOpen, setIsResultsModalOpen] = useState(false); // State for ResultsModal
+  const [isResultsModalOpen, setIsResultsModalOpen] = useState(false);
   const [selectedFixture, setSelectedFixture] = useState(null);
 
   const handleSave = (fixtureId, playerResults) => {
@@ -157,7 +157,7 @@ const FixturesScreen = () => {
             onSave={(results) => handleSave(fixture.id, results)}
             isCompleted={!!results[fixture.id]}
             onEnterRankings={() => handleOpenPositionModal(fixture)}
-            onViewResults={() => handleOpenResultsModal(fixture)} // Pass a new prop for viewing results
+            onViewResults={() => handleOpenResultsModal(fixture)} 
           />
         ))}
       </div>

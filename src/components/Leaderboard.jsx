@@ -1,15 +1,13 @@
 import React from "react";
 
 const Leaderboard = ({ players }) => {
-  // Sort players by points (descending) and then by name (ascending)
   const sortedPlayers = players.sort((a, b) => {
     if (b.points === a.points) {
-      return a.name.localeCompare(b.name); // Sort by name if points are equal
+      return a.name.localeCompare(b.name); 
     }
-    return b.points - a.points; // Sort by points
+    return b.points - a.points; 
   });
 
-  // Define colors for player cards
   const playerColors = [
     "bg-pink-100 border-pink-600",
     "bg-yellow-100 border-yellow-600",
@@ -18,7 +16,7 @@ const Leaderboard = ({ players }) => {
     "bg-indigo-100 border-indigo-600",
     "bg-green-100 border-green-600",
     "bg-blue-100 border-blue-600",
-    "bg-gray-100 border-gray-600", // Added for 8th player
+    "bg-gray-100 border-gray-600", 
   ];
 
   return (
