@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import FixtureCard from "../components/FixtureCard";
 import { Link } from "react-router-dom";
-import PositionModal from "../components/PositionModal"; 
+import PositionModal from "../components/PositionModal";
+import ResultsModal from "../components/ResultsModal";
 
 const FixturesScreen = () => {
   const [fixtures] = useState([
@@ -82,7 +83,8 @@ const FixturesScreen = () => {
     return savedResults ? JSON.parse(savedResults) : {};
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPositionModalOpen, setIsPositionModalOpen] = useState(false);
+  const [isResultsModalOpen, setIsResultsModalOpen] = useState(false); // State for ResultsModal
   const [selectedFixture, setSelectedFixture] = useState(null);
 
   const handleSave = (fixtureId, playerResults) => {
@@ -92,22 +94,31 @@ const FixturesScreen = () => {
   };
 
   const resetScores = () => {
-    localStorage.removeItem("fixtureResults");
-    window.location.reload();
+    const confirmReset = window.confirm("Are you sure you want to reset all scores? This action cannot be undone.");
+    if (confirmReset) {
+      localStorage.removeItem("fixtureResults");
+      window.location.reload();
+    }
   };
 
-  const handleOpenModal = (fixture) => {
+  const handleOpenPositionModal = (fixture) => {
     setSelectedFixture(fixture);
-    setIsModalOpen(true);
+    setIsPositionModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleOpenResultsModal = (fixture) => {
+    setSelectedFixture(fixture);
+    setIsResultsModalOpen(true);
+  };
+
+  const handleCloseModals = () => {
+    setIsPositionModalOpen(false);
+    setIsResultsModalOpen(false);
     setSelectedFixture(null);
   };
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-blue-50 to-purple-50">
+    <div className="min-h-screen p-6 bg-[#E6E6FA]">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-8">
         <Link
@@ -145,20 +156,30 @@ const FixturesScreen = () => {
             fixture={fixture}
             onSave={(results) => handleSave(fixture.id, results)}
             isCompleted={!!results[fixture.id]}
-            onEnterRankings={() => handleOpenModal(fixture)} // Pass a callback to open the modal
+            onEnterRankings={() => handleOpenPositionModal(fixture)}
+            onViewResults={() => handleOpenResultsModal(fixture)} // Pass a new prop for viewing results
           />
         ))}
       </div>
 
       {/* Position Modal */}
-      {isModalOpen && selectedFixture && (
+      {isPositionModalOpen && selectedFixture && (
         <PositionModal
           match={selectedFixture}
           onSave={(results) => {
             handleSave(selectedFixture.id, results);
-            handleCloseModal();
+            handleCloseModals();
           }}
-          onClose={handleCloseModal}
+          onClose={handleCloseModals}
+        />
+      )}
+
+      {/* Results Modal */}
+      {isResultsModalOpen && selectedFixture && results[selectedFixture.id] && (
+        <ResultsModal
+          match={selectedFixture}
+          results={results[selectedFixture.id]}
+          onClose={handleCloseModals}
         />
       )}
     </div>

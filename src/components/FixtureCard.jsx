@@ -13,7 +13,7 @@ const teamColors = {
   RR: "bg-purple-200 border-purple-600",
 };
 
-const FixtureCard = ({ fixture, onSave, isCompleted, onEnterRankings }) => {
+const FixtureCard = ({ fixture, onSave, isCompleted, onEnterRankings, onViewResults }) => {
   const homeTeam = fixture.teams.split(" vs ")[0];
   const cardColor = teamColors[homeTeam] || "bg-gray-200 border-gray-600";
 
@@ -22,6 +22,7 @@ const FixtureCard = ({ fixture, onSave, isCompleted, onEnterRankings }) => {
       className={`p-6 rounded-2xl shadow-lg border-2 ${cardColor} ${
         isCompleted ? "opacity-70" : "hover:shadow-xl hover:scale-105"
       } transition-all duration-300 cursor-pointer`}
+      onClick={isCompleted ? onViewResults : undefined} // Trigger onViewResults if completed
     >
       <h3 className="text-xl font-bold mb-2 text-gray-900 font-poppins">Match {fixture.id}</h3>
       <h3 className="text-lg mb-4 text-gray-800 font-poppins">{fixture.teams}</h3>
@@ -32,7 +33,7 @@ const FixtureCard = ({ fixture, onSave, isCompleted, onEnterRankings }) => {
 
       {!isCompleted ? (
         <button
-          onClick={onEnterRankings} // Call the callback to open the modal
+          onClick={onEnterRankings}
           className={`mt-4 px-6 py-2 bg-transparent border-2 ${cardColor.replace("bg-", "border-")} text-gray-900 rounded-full hover:bg-opacity-20 hover:scale-105 transition duration-300 font-poppins`}
         >
           Enter Rankings

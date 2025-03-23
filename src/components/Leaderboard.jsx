@@ -1,19 +1,45 @@
-// src/components/Leaderboard.jsx
-
 import React from "react";
 
 const Leaderboard = ({ players }) => {
-  // Sort players by points in descending order
-  const sortedPlayers = players.sort((a, b) => b.points - a.points);
+  // Sort players by points (descending) and then by name (ascending)
+  const sortedPlayers = players.sort((a, b) => {
+    if (b.points === a.points) {
+      return a.name.localeCompare(b.name); // Sort by name if points are equal
+    }
+    return b.points - a.points; // Sort by points
+  });
+
+  // Define colors for player cards
+  const playerColors = [
+    "bg-pink-100 border-pink-600",
+    "bg-yellow-100 border-yellow-600",
+    "bg-purple-100 border-purple-600",
+    "bg-orange-100 border-orange-600",
+    "bg-indigo-100 border-indigo-600",
+    "bg-green-100 border-green-600",
+    "bg-blue-100 border-blue-600",
+    "bg-gray-100 border-gray-600", // Added for 8th player
+  ];
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Leaderboard</h2>
-      <ul>
+      <h2 className="text-2xl font-bold mb-4 text-gray-900 font-poppins">
+        Leaderboard
+      </h2>
+      <ul className="space-y-2">
         {sortedPlayers.map((player, index) => (
-          <li key={index} className="flex justify-between py-2">
-            <span>{player.name}</span>
-            <span>{player.points} points</span>
+          <li
+            key={index}
+            className={`flex justify-between items-center p-4 rounded-lg border-2 ${
+              playerColors[index % playerColors.length]
+            }`}
+          >
+            <span className="text-lg font-semibold text-gray-900 font-poppins">
+              {player.name}
+            </span>
+            <span className="text-lg font-bold text-gray-900 font-poppins">
+              {player.points} points
+            </span>
           </li>
         ))}
       </ul>

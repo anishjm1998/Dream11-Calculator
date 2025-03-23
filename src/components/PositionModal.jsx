@@ -3,8 +3,17 @@ import { getTotalPoints, getParticipationPoints } from "../services/pointsServic
 import TiedPositionsModal from "./TiedPositionsModal";
 
 const PositionModal = ({ match, onSave, onClose }) => {
-  const predefinedPlayers = ["Anish", "Supriyam", "Shashwata", "Aron", "Ashwin", "Akash", "Indrajit"];
-  const [rankings, setRankings] = useState(Array(7).fill(""));
+  const predefinedPlayers = [
+    "Anish",
+    "Supriyam",
+    "Shashwata",
+    "Aron",
+    "Ashwin",
+    "Akash",
+    "Indrajit",
+    "Dipra", // Added 8th player
+  ];
+  const [rankings, setRankings] = useState(Array(8).fill("")); // Updated for 8 players
   const [isAbandoned, setIsAbandoned] = useState(false);
   const [isTiedModalOpen, setIsTiedModalOpen] = useState(false);
   const [tiedPosition, setTiedPosition] = useState(null);
@@ -43,10 +52,10 @@ const PositionModal = ({ match, onSave, onClose }) => {
         alert("Both positions must have players assigned to create a tie!");
         return;
       }
-      
+
       // Store the tied position for the modal
       setTiedPosition(tiedPos);
-      
+
       // Set updated rankings for the modal preview
       setUpdatedRankings([...rankings]);
       setIsTiedModalOpen(true);
@@ -57,51 +66,48 @@ const PositionModal = ({ match, onSave, onClose }) => {
 
   const handleConfirmTiedPositions = () => {
     if (!tiedPosition) return;
-    
+
     // Create the results with tied positions
     const playerAtTiedPosition = updatedRankings[tiedPosition - 1];
     const tiedWithPlayer = updatedRankings[tiedPosition];
-    
+
     // Calculate results with tied positions
     const results = [];
-    
+
     // Process players before the tie
     for (let i = 0; i < tiedPosition - 1; i++) {
       results.push({
         name: updatedRankings[i],
         position: i + 1,
-        points: getTotalPoints(i + 1)
+        points: getTotalPoints(i + 1),
       });
     }
-    
+
     // Add the tied players
     results.push({
       name: playerAtTiedPosition,
       position: tiedPosition,
       points: getTotalPoints(tiedPosition),
-      tied: true
+      tied: true,
     });
-    
+
     results.push({
       name: tiedWithPlayer,
       position: tiedPosition,
       points: getTotalPoints(tiedPosition),
-      tied: true
+      tied: true,
     });
-    
+
     // Process remaining players with adjusted positions
-    // Since two players are tied, they share a position, so we need to adjust
-    // the positions of subsequent players
     for (let i = tiedPosition + 1; i < updatedRankings.length; i++) {
-      // Adjust position (+1) because two players are taking up one position
       const adjustedPosition = i + 1;
       results.push({
         name: updatedRankings[i],
         position: adjustedPosition,
-        points: getTotalPoints(adjustedPosition)
+        points: getTotalPoints(adjustedPosition),
       });
     }
-    
+
     // Save the results and close both modals
     onSave(results);
     setIsTiedModalOpen(false);
@@ -130,9 +136,9 @@ const PositionModal = ({ match, onSave, onClose }) => {
                 >
                   <option value="">Select Player</option>
                   {predefinedPlayers.map((playerName) => (
-                    <option 
-                      key={playerName} 
-                      value={playerName} 
+                    <option
+                      key={playerName}
+                      value={playerName}
                       disabled={rankings.includes(playerName) && playerName !== player}
                     >
                       {playerName}

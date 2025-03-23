@@ -12,6 +12,7 @@ const LeaderboardScreen = () => {
     { name: "Ashwin", points: 0 },
     { name: "Akash", points: 0 },
     { name: "Indrajit", points: 0 },
+    { name: "Dipra", points: 0 }, // Added 8th player
   ]);
 
   const [showConfetti, setShowConfetti] = useState(true);
@@ -36,7 +37,13 @@ const LeaderboardScreen = () => {
         points: playerPoints[player.name] || 0,
       }));
 
-      updatedPlayers.sort((a, b) => b.points - a.points);
+      // Sort players by points (descending) and then by name (ascending)
+      updatedPlayers.sort((a, b) => {
+        if (b.points === a.points) {
+          return a.name.localeCompare(b.name); // Sort by name if points are equal
+        }
+        return b.points - a.points; // Sort by points
+      });
 
       const finalPlayers = [];
       for (let i = 0; i < updatedPlayers.length; i++) {
@@ -48,6 +55,10 @@ const LeaderboardScreen = () => {
       }
 
       setPlayers(finalPlayers);
+    } else {
+      // If no saved results, sort players alphabetically
+      const sortedPlayers = [...players].sort((a, b) => a.name.localeCompare(b.name));
+      setPlayers(sortedPlayers.map((player, index) => ({ ...player, position: index + 1 })));
     }
 
     // Hide confetti after 3 seconds
@@ -56,57 +67,109 @@ const LeaderboardScreen = () => {
   }, []);
 
   const resetScores = () => {
-    localStorage.removeItem("fixtureResults");
-    window.location.reload();
-  };
-
-  // Get trophy emoji based on position
-  const getTrophyEmoji = (position) => {
-    switch (position) {
-      case 1:
-        return "🥇";
-      case 2:
-        return "🥈";
-      case 3:
-        return "🥉";
-      default:
-        return "";
+    const confirmReset = window.confirm("Are you sure you want to reset all scores? This action cannot be undone.");
+    if (confirmReset) {
+      localStorage.removeItem("fixtureResults");
+      window.location.reload();
     }
   };
 
   return (
-    <div className="min-h-screen p-6 bg-gradient-to-br from-blue-50 to-purple-50">
+    <div className="min-h-screen bg-[#E6E6FA] flex items-center justify-center">
       {/* Confetti Animation */}
       {showConfetti && <Confetti />}
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl w-full px-6">
         {/* Page Heading */}
         <div className="text-center mb-12">
-          <h1 className="text-6xl font-extrabold text-gray-900 font-poppins">
-            🏆 Leaderboard 🏆
+          <h1 className="text-4xl font-extrabold text-gray-900 font-poppins">
+            Leaderboard
           </h1>
-          <p className="text-xl text-gray-700 mt-4 font-poppins">
-            Check out the current standings!
-          </p>
         </div>
 
-        {/* Leaderboard Cards */}
+        {/* Podium for Top 3 Players */}
+        <div className="flex justify-center items-end space-x-4 mb-12">
+          {/* 2nd Place */}
+          {players.length > 1 && (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="bg-gradient-to-br from-yellow-100 to-yellow-200 p-6 rounded-2xl shadow-lg border-2 border-yellow-600 text-center w-1/4"
+              whileHover={{ scale: 1.05 }} // Add hover effect
+            >
+              <span className="text-2xl font-bold text-gray-900 font-poppins">
+                🥈 2nd Place
+              </span>
+              <p className="text-xl font-semibold text-gray-800 font-poppins mt-2">
+                {players[1].name}
+              </p>
+              <p className="text-lg font-bold text-gray-900 font-poppins">
+                {players[1].points} pts
+              </p>
+            </motion.div>
+          )}
+
+          {/* 1st Place */}
+          {players.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="bg-gradient-to-br from-pink-100 to-pink-200 p-8 rounded-2xl shadow-lg border-2 border-pink-600 text-center w-1/3"
+              whileHover={{ scale: 1.05 }} // Add hover effect
+            >
+              <span className="text-3xl font-bold text-gray-900 font-poppins">
+                🥇 1st Place
+              </span>
+              <p className="text-2xl font-semibold text-gray-800 font-poppins mt-2">
+                {players[0].name}
+              </p>
+              <p className="text-xl font-bold text-gray-900 font-poppins">
+                {players[0].points} pts
+              </p>
+            </motion.div>
+          )}
+
+          {/* 3rd Place */}
+          {players.length > 2 && (
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="bg-gradient-to-br from-purple-100 to-purple-200 p-6 rounded-2xl shadow-lg border-2 border-purple-600 text-center w-1/4"
+              whileHover={{ scale: 1.05 }} // Add hover effect
+            >
+              <span className="text-2xl font-bold text-gray-900 font-poppins">
+                🥉 3rd Place
+              </span>
+              <p className="text-xl font-semibold text-gray-800 font-poppins mt-2">
+                {players[2].name}
+              </p>
+              <p className="text-lg font-bold text-gray-900 font-poppins">
+                {players[2].points} pts
+              </p>
+            </motion.div>
+          )}
+        </div>
+
+        {/* Leaderboard Cards for Other Players */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence>
-            {players.map((player, index) => (
+            {players.slice(3).map((player, index) => (
               <motion.div
                 key={player.name}
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -50 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-gradient-to-br from-white to-gray-50 p-6 rounded-2xl shadow-lg border-2 border-gray-200 hover:shadow-xl transition-all"
-                whileHover={{ scale: 1.05 }}
+                className="p-6 rounded-2xl shadow-lg border-2 bg-gray-100 border-gray-300 hover:shadow-xl transition-all"
+                whileHover={{ scale: 1.05 }} // Add hover effect
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <span className="text-2xl font-bold text-gray-900 font-poppins">
-                      #{player.position} {getTrophyEmoji(player.position)}
+                      #{player.position}
                     </span>
                     <span className="text-xl font-semibold text-gray-800 font-poppins">
                       {player.name}

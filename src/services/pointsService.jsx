@@ -1,14 +1,13 @@
-// src/services/pointsService.js
-
 export const calculatePoints = (position) => {
   const pointsMap = {
-    1: 10,
-    2: 7,
-    3: 5,
-    4: 3,
-    5: 2,
-    6: 1,
-    7: 0,
+    1: 10, // 🥇 1st Place
+    2: 8,  // 🥈 2nd Place
+    3: 6,  // 🥉 3rd Place
+    4: 4,  // 4th Place
+    5: 3,  // 5th Place
+    6: 2,  // 6th Place
+    7: 1,  // 7th Place
+    8: 0,  // 8th Place
   };
   return pointsMap[position] || 0;
 };
@@ -17,26 +16,6 @@ export const getParticipationPoints = () => 2;
 
 export const getTotalPoints = (position) => {
   return calculatePoints(position) + getParticipationPoints();
-};
-
-const handleTiedPositions = () => {
-  const tiedPosition = parseInt(prompt("Enter the tied position (e.g., 1, 2, etc.):"));
-  if (tiedPosition && tiedPosition > 0 && tiedPosition <= rankings.length) {
-    const newRankings = [...rankings];
-
-    // Duplicate the tied position
-    const tiedPlayer = newRankings[tiedPosition - 1]; // Get the player at the tied position
-    newRankings.splice(tiedPosition - 1, 0, tiedPlayer); // Insert the duplicate at the tied position
-
-    // Remove the position under it (e.g., if tied at 4th, remove 5th)
-    if (newRankings.length > 7) {
-      newRankings.splice(tiedPosition + 1, 1); // Remove the next position
-    }
-
-    setRankings(newRankings);
-  } else {
-    alert("Invalid position entered!");
-  }
 };
 
 export const handleAbandonedMatch = (players) => {
