@@ -66,37 +66,67 @@
         "position": 7,
         "points": 3
       }
+    ],
+    "3": [
+      {
+        "name": "Anish",
+        "points": 2
+      },
+      {
+        "name": "Supriyam",
+        "points": 2
+      },
+      {
+        "name": "Shashwata",
+        "points": 2
+      },
+      {
+        "name": "Aron",
+        "points": 2
+      },
+      {
+        "name": "Ashwin",
+        "points": 2
+      },
+      {
+        "name": "Akash",
+        "points": 2
+      },
+      {
+        "name": "Indrajit",
+        "points": 2
+      }
     ]
   },
   "leaderboard": [
     {
       "name": "Anish",
-      "points": 14
+      "points": 16
     },
     {
       "name": "Supriyam",
-      "points": 12
+      "points": 14
     },
     {
       "name": "Shashwata",
-      "points": 10
+      "points": 12
     },
     {
       "name": "Aron",
-      "points": 8
+      "points": 10
     },
     {
       "name": "Ashwin",
-      "points": 7
+      "points": 9
     },
     {
       "name": "Akash",
-      "points": 6
+      "points": 8
     },
     {
       "name": "Indrajit",
-      "points": 5
+      "points": 7
     }
   ],
-  "lastUpdated": "2025-03-29T05:12:24.069Z"
+  "lastUpdated": "2025-03-29T05:16:04.047Z"
 }
