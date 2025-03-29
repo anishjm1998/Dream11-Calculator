@@ -7,7 +7,6 @@ export const calculatePoints = (position) => {
     5: 3,  
     6: 2,  
     7: 1,  
-    8: 0,  
   };
   return pointsMap[position] || 0;
 };

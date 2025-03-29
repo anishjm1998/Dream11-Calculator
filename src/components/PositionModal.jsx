@@ -11,7 +11,6 @@ const PositionModal = ({ match, onSave, onClose }) => {
     "Ashwin",
     "Akash",
     "Indrajit",
-    "Dipra",
   ];
   const [rankings, setRankings] = useState(Array(8).fill("")); 
   const [isAbandoned, setIsAbandoned] = useState(false);

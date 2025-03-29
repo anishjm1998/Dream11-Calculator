@@ -16,7 +16,6 @@ const Leaderboard = ({ players }) => {
     "bg-indigo-100 border-indigo-600",
     "bg-green-100 border-green-600",
     "bg-blue-100 border-blue-600",
-    "bg-gray-100 border-gray-600", 
   ];
 
   return (

@@ -9,7 +9,6 @@ const ResultsModal = ({ match, results, onClose }) => {
     "bg-indigo-100 border-indigo-600", // 5th Place
     "bg-green-100 border-green-600", // 6th Place
     "bg-blue-100 border-blue-600", // 7th Place
-    "bg-gray-100 border-gray-600", // 8th Place
   ];
 
   return (
