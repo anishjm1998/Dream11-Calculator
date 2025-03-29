@@ -12,7 +12,7 @@ const PositionModal = ({ match, onSave, onClose }) => {
     "Akash",
     "Indrajit",
   ];
-  const [rankings, setRankings] = useState(Array(8).fill("")); 
+  const [rankings, setRankings] = useState(Array(7).fill("")); 
   const [isAbandoned, setIsAbandoned] = useState(false);
   const [isTiedModalOpen, setIsTiedModalOpen] = useState(false);
   const [tiedPosition, setTiedPosition] = useState(null);

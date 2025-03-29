@@ -56,11 +56,6 @@ const PointsSystemScreen = () => {
                 7th Place: 1 point
               </span>
             </li>
-            <li className="flex items-center bg-gray-100 p-3 rounded-lg border-2 border-gray-600">
-              <span className="text-base font-semibold text-gray-900 font-poppins">
-                8th Place: 0 points
-              </span>
-            </li>
           </ul>
           <p className="text-base text-gray-700 mt-4 font-poppins">
             <strong>Note:</strong> All players receive an additional 2 points for participating in the contest.

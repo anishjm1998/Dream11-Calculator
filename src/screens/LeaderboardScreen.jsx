@@ -12,7 +12,6 @@ const LeaderboardScreen = () => {
     { name: "Ashwin", points: 0 },
     { name: "Akash", points: 0 },
     { name: "Indrajit", points: 0 },
-    { name: "Dipra", points: 0 },
   ]);
 
   const [showConfetti, setShowConfetti] = useState(true);
