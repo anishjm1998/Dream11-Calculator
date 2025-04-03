@@ -3,6 +3,7 @@ import FixtureCard from "../components/FixtureCard";
 import { Link } from "react-router-dom";
 import PositionModal from "../components/PositionModal";
 import ResultsModal from "../components/ResultsModal";
+import { exportData, downloadFile } from "../utils/dataUtils";
 
 const FixturesScreen = () => {
   const [fixtures] = useState([
@@ -117,6 +118,32 @@ const FixturesScreen = () => {
     setSelectedFixture(null);
   };
 
+  const handleExportData = () => {
+    const data = exportData();
+    downloadFile(data, `dream11-ipl-data-${new Date().toISOString().split('T')[0]}.json`);
+  };
+
+  const handleImportData = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const success = importData(e.target.result);
+        if (success) {
+          alert("Data imported successfully! Page will now reload.");
+          window.location.reload();
+        } else {
+          alert("Failed to import data - invalid format");
+        }
+      } catch (error) {
+        alert("Error importing data: " + error.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+
   return (
     <div className="min-h-screen p-6 bg-[#E6E6FA]">
       {/* Header Section */}
@@ -127,12 +154,29 @@ const FixturesScreen = () => {
         >
           Go Back
         </Link>
-        <button
-          onClick={resetScores}
-          className="px-6 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all font-poppins"
-        >
-          Reset Scores
-        </button>
+        <div className="flex space-x-2">
+          <button
+            onClick={handleExportData}
+            className="px-6 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-all font-poppins"
+          >
+            Export Data
+          </button>
+          <label className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all font-poppins cursor-pointer">
+            Import Data
+            <input
+              type="file"
+              accept=".json"
+              onChange={handleImportData}
+              className="hidden"
+            />
+          </label>
+          <button
+            onClick={resetScores}
+            className="px-6 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all font-poppins"
+          >
+            Reset Scores
+          </button>
+        </div>
       </div>
 
       {/* Page Title */}
@@ -157,7 +201,7 @@ const FixturesScreen = () => {
             onSave={(results) => handleSave(fixture.id, results)}
             isCompleted={!!results[fixture.id]}
             onEnterRankings={() => handleOpenPositionModal(fixture)}
-            onViewResults={() => handleOpenResultsModal(fixture)} 
+            onViewResults={() => handleOpenResultsModal(fixture)}
           />
         ))}
       </div>

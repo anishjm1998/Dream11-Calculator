@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Confetti from "react-confetti";
+import { exportData, downloadFile } from "../utils/dataUtils";
 
 const LeaderboardScreen = () => {
   const [players, setPlayers] = useState([
@@ -68,6 +69,32 @@ const LeaderboardScreen = () => {
       localStorage.removeItem("fixtureResults");
       window.location.reload();
     }
+  };
+
+  const handleExportData = () => {
+    const data = exportData();
+    downloadFile(data, `dream11-ipl-data-${new Date().toISOString().split('T')[0]}.json`);
+  };
+  
+  const handleImportData = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const success = importData(e.target.result);
+        if (success) {
+          alert("Data imported successfully! Page will now reload.");
+          window.location.reload();
+        } else {
+          alert("Failed to import data - invalid format");
+        }
+      } catch (error) {
+        alert("Error importing data: " + error.message);
+      }
+    };
+    reader.readAsText(file);
   };
 
   return (
@@ -188,6 +215,21 @@ const LeaderboardScreen = () => {
           >
             Go Back
           </Link>
+          <button
+            onClick={handleExportData}
+            className="px-6 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition-all font-poppins text-center"
+          >
+            Export Data
+          </button>
+          <label className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-all font-poppins text-center cursor-pointer">
+            Import Data
+            <input
+              type="file"
+              accept=".json"
+              onChange={handleImportData}
+              className="hidden"
+            />
+          </label>
           <button
             onClick={resetScores}
             className="px-6 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all font-poppins text-center"
